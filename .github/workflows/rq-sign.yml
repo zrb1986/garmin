@@ -1,0 +1,27 @@
+# .github/workflows/rq-sign.yml
+name: RQ Auto Sign
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 0 * * *"   # UTC 时间示例（你可以更改）
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: pip install httpx
+
+      - name: Run RQ Sign
+        run: |
+          python scripts/rq_sign.py \
+            --email=${{ secrets.RQ_EMAIL }} \
+            --password=${{ secrets.RQ_PASSWORD }}
